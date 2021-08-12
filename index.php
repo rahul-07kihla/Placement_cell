@@ -3,7 +3,7 @@
 ?>
     <main>
 	
-	<!--demo-->
+	<!--cool bro-->
 
         <!-- slider Area Start-->
         <div class="slider-area ">
