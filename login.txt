@@ -1,0 +1,142 @@
+<?php  session_start();   // session starts with the help of this function 
+
+
+if(isset($_SESSION['use']))   // Checking whether the session is already there or not if 
+                              // true then header redirect it to the home page directly 
+ {
+    header("Location:home.php"); 
+ }
+
+if(isset($_POST['login']))   // it checks whether the user clicked login button or not 
+{
+     $user = $_POST['user'];
+     $pass = $_POST['pass'];
+
+      if($user == "Ank" && $pass == "1234")  // username is  set to "Ank"  and Password   
+         {                                   // is 1234 by default     
+
+          $_SESSION['use']=$user;
+
+
+         echo '<script type="text/javascript"> window.open("home.php","_self");</script>';            //  On Successful Login redirects to home.php
+
+        }
+
+        else
+        {
+            echo "invalid UserName or Password";        
+        }
+}
+ ?>
+<html>
+<head>
+
+<title> Login Page   </title>
+
+</head>
+
+<body>
+
+<form action="" method="post">
+
+    <table width="200" border="0">
+  <tr>
+    <td>  UserName</td>
+    <td> <input type="text" name="user" > </td>
+  </tr>
+  <tr>
+    <td> PassWord  </td>
+    <td><input type="password" name="pass"></td>
+  </tr>
+  <tr>
+    <td> <input type="submit" name="login" value="LOGIN"></td>
+    <td></td>
+  </tr>
+</table>
+</form>
+
+</body>
+</html>
+
+
+home.php
+<?php   session_start();  ?>
+
+<html>
+  <head>
+       <title> Home </title>
+  </head>
+  <body>
+<?php
+      if(!isset($_SESSION['use'])) // If session is not set then redirect to Login Page
+       {
+           header("Location:Login.php");  
+       }
+
+          echo $_SESSION['use'];
+
+          echo "Login Success";
+
+          echo "<a href='logout.php'> Logout</a> "; 
+?>
+</body>
+</html>
+
+logout.php
+<?php
+ session_start();
+
+  echo "Logout Successfully ";
+  session_destroy();   // function that Destroys Session 
+  header("Location: Login.php");
+?>
+
+<?php
+$target_dir = "uploads/";
+$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+$uploadOk = 1;
+$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+// Check if image file is a actual image or fake image
+if(isset($_POST["submit"])) {
+  $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+  if($check !== false) {
+    echo "File is an image - " . $check["mime"] . ".";
+    $uploadOk = 1;
+  } else {
+    echo "File is not an image.";
+    $uploadOk = 0;
+  }
+}
+
+// Check if file already exists
+if (file_exists($target_file)) {
+  echo "Sorry, file already exists.";
+  $uploadOk = 0;
+}
+
+// Check file size
+if ($_FILES["fileToUpload"]["size"] > 500000) {
+  echo "Sorry, your file is too large.";
+  $uploadOk = 0;
+}
+
+// Allow certain file formats
+if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+&& $imageFileType != "gif" ) {
+  echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+  $uploadOk = 0;
+}
+
+// Check if $uploadOk is set to 0 by an error
+if ($uploadOk == 0) {
+  echo "Sorry, your file was not uploaded.";
+// if everything is ok, try to upload file
+} else {
+  if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+    echo "The file ". htmlspecialchars( basename( $_FILES["fileToUpload"]["name"])). " has been uploaded.";
+  } else {
+    echo "Sorry, there was an error uploading your file.";
+  }
+}
+?>
